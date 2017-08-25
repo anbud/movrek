@@ -23,7 +23,7 @@ Router.onAfterAction(function() {
 
 Router.route('/', {
     name: 'home',
-    waitOn: () => Meteor.apiSubscribe('discover', 'get', '/discover/movie?sort_by=vote_average.desc'),
+    waitOn: () => Meteor.apiSubscribe('discover', 'get', `/discover/movie?page=${Number(Math.random() * 998) + 1}`),
     action: function() {
         this.render('home', {
             data: () => ({

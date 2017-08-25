@@ -2,7 +2,7 @@ Template.home.helpers({
     fullStars: function() {
         let arr = []
 
-        for (let i = 1; i < Math.floor(this.vote_average / 2); i++) {
+        for (let i = 1; i <= Math.floor(this.vote_average / 2); i++) {
             arr.push(i)
         }
 
@@ -11,7 +11,7 @@ Template.home.helpers({
     halfStars: function() {
         let arr = []
 
-        for (let i = Math.floor(this.vote_average / 2); i < Math.ceil(this.vote_average / 2); i++) {
+        for (let i = Math.floor(this.vote_average / 2) + 1; i <= Math.ceil(this.vote_average / 2); i++) {
             arr.push(i)
         }
 
@@ -20,7 +20,7 @@ Template.home.helpers({
     emptyStars: function() {
         let arr = []
 
-        for (let i = Math.ceil(this.vote_average / 2); i <= 5; i++) {
+        for (let i = Math.ceil(this.vote_average / 2) + 1; i <= 5; i++) {
             arr.push(i)
         }
 
