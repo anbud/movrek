@@ -1,0 +1,28 @@
+<template name="home">
+	<div class="row">
+		{{#each movies}}
+        <div class="col s4 m4 l4">
+        	<div class="card">
+            	<div class="card-image">
+            		<img src="https://image.tmdb.org/t/p/w1280{{backdrop_path}}">
+              		<span class="card-title">{{title}}</span>
+            	</div>
+            	<div class="card-content">
+              		<p>{{overview}}</p>
+            	</div>
+            	<div class="card-action">
+              		{{#each fullStars}}
+              			<i class="material-icons star cyan darken-3" data-val="{{this}}">star</i>
+              		{{/each}}
+              		{{#each halfStars}}
+              			<i class="material-icons star cyan darken-3" data-val="{{this}}">star_half</i>
+              		{{/each}}
+              		{{#each emptyStars}}
+              			<i class="material-icons star cyan darken-3" data-val="{{this}}">star_border</i>
+              		{{/each}}
+            	</div>
+          	</div>
+        </div>
+        {{/each}}
+      </div>
+</template>
