@@ -34,3 +34,34 @@ Meteor.methods({
     }
 })
 
+Accounts.config({
+    forbidClientAccountCreation: false
+})
+
+Meteor.users.deny({
+    update: () => true,
+    remove: () => true,
+    insert: () => true
+})
+
+Accounts.onCreateUser((options, user) => {
+    if (!user.services.facebook && !(RegExp('.+@.+\..+', 'i').test(user.emails[0].address) && require('disposable-email').validate(user.emails[0].address.split('@')[1]))) {
+        throw new Meteor.Error('Error!', 'Invalid email address!')
+    }
+
+    if (!options.profile) {
+        options.profile = {}
+    }
+
+    if (user.services.facebook) {
+        options.profile.picture = `https://graph.facebook.com/${user.services.facebook.id}/picture?type=large`
+    }
+
+    if (options.name) {
+        options.profile.name = options.name
+    }
+
+    user.profile = options.profile
+
+    return user
+})

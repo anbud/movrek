@@ -19,8 +19,6 @@
     "plugin:meteor/recommended"
   ],
   "rules": {
-    "no-ternary": 2,
-    "no-tabs": 2,
     "indent": [
       1,
       4
@@ -81,7 +79,6 @@
         "max": 2
       }
     ],
-    "no-nested-ternary": 2,
     "no-new-object": 2,
     "no-spaced-func": 2,
     "no-trailing-spaces": 2,

@@ -1,13 +1,18 @@
-<template name="login">
+<template name="register">
 	<div class="row">
 		<div class="col s12 m12 l12">
-			<h2 class="center">Login</h2>
+			<h2 class="center">Register</h2>
 		</div>
 	</div>
 
 	<div class="row">
     	<form class="col s12">
       		<div class="row">
+      			<div class="input-field col s12 m12">
+          			<i class="material-icons prefix">account_box</i>
+          			<input id="js-name" type="text" class="validate">
+          			<label for="js-name">Name</label>
+        		</div>
         		<div class="input-field col s12 m12">
           			<i class="material-icons prefix">email</i>
           			<input id="js-email" type="email" class="validate">
@@ -20,7 +25,7 @@
         		</div>
       		</div>
 
-      		<a class="waves-effect waves-light btn right cyan darken-3" id="js-submit"><i class="material-icons right">send</i>Login</a>
+      		<a class="waves-effect waves-light btn right cyan darken-3" id="js-submit"><i class="material-icons right">send</i>Register</a>
     	</form>
   	</div>
 </template>

@@ -11,10 +11,12 @@ Router.onRun(function() {
 
 Router.onBeforeAction(function() {
     if (!Meteor.userId()) {
-        Router.go('login')
+        Router.go('splash')
     }
 
     this.next()
+}, {
+    except: ['login', 'register', 'splash']
 })
 
 Router.onAfterAction(function() {
@@ -27,9 +29,16 @@ Router.route('/', {
     action: function() {
         this.render('home', {
             data: () => ({
-                movies: Meteor.data.get('discover').results
+                movies: Meteor.data.get('discover').results.filter(i => !!i.backdrop_path).slice(0, 6)
             })
         })
+    }
+})
+
+Router.route('/splash', {
+    name: 'splash',
+    action: function() {
+        this.render('splash')
     }
 })
 
@@ -38,6 +47,17 @@ Router.route('/login', {
     action: function() {
         if (!Meteor.userId()) {
             this.render('login')
+        } else {
+            Router.go('home')
+        }
+    }
+})
+
+Router.route('/register', {
+    name: 'register',
+    action: function() {
+        if (!Meteor.userId()) {
+            this.render('register')
         } else {
             Router.go('home')
         }

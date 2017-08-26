@@ -1,29 +1,21 @@
 Template.home.helpers({
-    fullStars: function() {
+    stars: function(type) {
         let arr = []
 
-        for (let i = 1; i <= Math.floor(this.vote_average / 2); i++) {
+        let lowerBound = type === 'full' ? 1 : (type === 'half' ? (Math.floor(this.vote_average / 2) + 1) : (Math.ceil(this.vote_average / 2) + 1))
+        let upperBound = type === 'full' ? Math.floor(this.vote_average / 2) : (type === 'half' ? Math.ceil(this.vote_average / 2) : 5)
+
+        for (let i = lowerBound; i <= upperBound; i++) {
             arr.push(i)
         }
 
         return arr
     },
-    halfStars: function() {
-        let arr = []
+    overview_short: function() {
+        return `${this.overview.slice(0, 150)}...`
+    }
+})
 
-        for (let i = Math.floor(this.vote_average / 2) + 1; i <= Math.ceil(this.vote_average / 2); i++) {
-            arr.push(i)
-        }
-
-        return arr
-    },
-    emptyStars: function() {
-        let arr = []
-
-        for (let i = Math.ceil(this.vote_average / 2) + 1; i <= 5; i++) {
-            arr.push(i)
-        }
-
-        return arr
-    },
+Template.navbar.onRendered(() => {
+    $('.dropdown-button').dropdown()
 })
