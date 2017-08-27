@@ -21,6 +21,25 @@ Template.home.events({
     }
 })
 
+Template.home.onRendered(() => {
+    $(window).scroll(() => {
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+            $('#progress-bar').removeClass('determinate').addClass('indeterminate')
+
+            Meteor.apiSubscribe('discover-inf', 'get', `/discover/movie?page=${Number(Math.random() * 998) + 1}`, {}, true, (err, data) => {
+                if (!err) {
+                    let d = Meteor.data.get('discover')
+
+                    d.results = _.union(d.results, data.results.slice(0, 10))
+
+                    Meteor.data.set('discover', d)
+                }
+                $('#progress-bar').removeClass('indeterminate').addClass('determinate')
+            })
+        }
+    })
+})
+
 Template.navbar.events({
     'click #js-logout': (event, templateInstance) => {
         event.preventDefault()

@@ -28,9 +28,7 @@ Router.route('/home', {
     waitOn: () => Meteor.apiSubscribe('discover', 'get', `/discover/movie?page=${Number(Math.random() * 998) + 1}`),
     action: function() {
         this.render('home', {
-            data: () => ({
-                movies: (Meteor.data.get('discover').results || []).filter(i => !!i.backdrop_path).slice(0, 6)
-            })
+            data: () => Meteor.data.get('discover')
         })
     }
 })

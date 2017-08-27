@@ -13,7 +13,8 @@ Template.home.helpers({
     },
     overview_short: function() {
         return `${this.overview.slice(0, 150)}...`
-    }
+    },
+    movies: () => (Template.instance().data.results || []).filter(i => !!i.backdrop_path)
 })
 
 Template.navbar.onRendered(() => {
@@ -21,5 +22,6 @@ Template.navbar.onRendered(() => {
 })
 
 Template.navbar.helpers({
-    history: () => history.length > 0
+    history: () => history.length > 0,
+    home: () => ((Router.current() || {}).route || {}).getName() === 'home'
 })

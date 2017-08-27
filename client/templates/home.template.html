@@ -1,14 +1,14 @@
 <template name="home">
-	<div class="row">
+	<div class="row center">
 		{{#each movies}}
-        <div class="col s4 m6 l4">
+        <div class="col s12 m12 l12">
         	<div class="card">
             	<div class="card-image">
             		<img src="https://image.tmdb.org/t/p/w1280{{backdrop_path}}" class="activator">
             		<span class="card-title activator">{{title}}</span>
             	</div>
             	<div class="card-content">
-              		<p class="activator">{{overview_short}}</p>
+              		<p class="activator truncate">{{overview}}</p>
             	</div>
             	<div class="card-reveal">
 			      	<span class="card-title grey-text text-darken-4">{{title}}<i class="material-icons right">close</i></span>
