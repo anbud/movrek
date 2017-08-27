@@ -14,6 +14,7 @@
     "fibers": "^2.0.0",
     "hammerjs": "^2.0.8",
     "materialize-css": "^0.100.1",
-    "meteor-node-stubs": "~0.2.4"
+    "meteor-node-stubs": "~0.2.4",
+    "predictionio-driver": "^0.5.2"
   }
 }

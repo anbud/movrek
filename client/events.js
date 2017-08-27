@@ -28,6 +28,18 @@ Template.navbar.events({
         Meteor.logout()
 
         Router.go('splash')
+    },
+    'click #js-refresh': (event, templateInstance) => {
+        event.preventDefault()
+
+        $('#progress-bar').removeClass('determinate').addClass('indeterminate')
+
+        Meteor.apiSubscribe('discover', 'get', `/discover/movie?page=${Number(Math.random() * 998) + 1}`, {}, true, (err, data) => {
+            $('#progress-bar').removeClass('indeterminate').addClass('determinate')
+        })
+    },
+    'click #js-back': (event, templateInstance) => {
+        history.back(-1)
     }
 })
 

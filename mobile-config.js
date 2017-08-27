@@ -14,4 +14,6 @@ App.icons({
     'android_xhdpi': 'public/images/icon.png',
     'android_xxhdpi': 'public/images/icon.png',
     'android_xxxhdpi': 'public/images/icon.png',
-});
+})
+
+App.accessRule('*')

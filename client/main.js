@@ -6,13 +6,18 @@ const Materialize = require('materialize-css')
 
 Meteor.data = new ReactiveDict()
 
-Meteor.apiSubscribe = (key, method, endpoint, data, callback) => {
+Meteor.apiSubscribe = (key, method, endpoint, data = {}, rerun = false, callback = () => {}) => {
     if (data && typeof data === 'function') {
         callback = data
         data = {}
     }
 
-    if (!Meteor.data.get(key)) {
+    if (rerun && typeof rerun === 'function') {
+        callback = rerun
+        rerun = false
+    }
+
+    if (!Meteor.data.get(key) || rerun) {
         Meteor.call('callApi', method, endpoint, data || {}, (err, data) => {
             if (data) {
                 Meteor.data.set(key, data.data)

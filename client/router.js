@@ -23,23 +23,28 @@ Router.onAfterAction(function() {
     $('#progress-bar').removeClass('indeterminate').addClass('determinate')
 })
 
-Router.route('/', {
+Router.route('/home', {
     name: 'home',
     waitOn: () => Meteor.apiSubscribe('discover', 'get', `/discover/movie?page=${Number(Math.random() * 998) + 1}`),
     action: function() {
         this.render('home', {
             data: () => ({
-                movies: Meteor.data.get('discover').results.filter(i => !!i.backdrop_path).slice(0, 6)
+                movies: (Meteor.data.get('discover').results || []).filter(i => !!i.backdrop_path).slice(0, 6)
             })
         })
     }
 })
 
-Router.route('/splash', {
+Router.route('/', {
     name: 'splash',
     action: function() {
-        this.render('splash')
-    }
+        if (!Meteor.userId()) {
+            this.render('splash')
+        } else {
+            Router.go('home')
+        }
+    },
+    layoutTemplate: ''
 })
 
 Router.route('/login', {

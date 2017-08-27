@@ -24,3 +24,5 @@ http
 check
 reactive-dict
 accounts-password
+accounts-facebook
+service-configuration

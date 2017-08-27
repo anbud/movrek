@@ -19,3 +19,7 @@ Template.home.helpers({
 Template.navbar.onRendered(() => {
     $('.dropdown-button').dropdown()
 })
+
+Template.navbar.helpers({
+    history: () => history.length > 0
+})

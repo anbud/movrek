@@ -1,6 +1,14 @@
 const apiUrl = 'https://api.themoviedb.org/3'
 const apiKey = '84fcaac366c4f4efa66458ad7aa32d16'
 
+const predictionioKey = ''
+
+const predictionio = require('predictionio-driver')
+const pioClient = new predictionio.Events({
+    appId: 1,
+    accessKey: predictionioKey
+})
+
 Meteor.methods({
     callApi: function(method, endpoint, data = {}) {
         check(method, String)
@@ -63,5 +71,22 @@ Accounts.onCreateUser((options, user) => {
 
     user.profile = options.profile
 
+    pioClient.createUser({
+        uid: user._id
+    }).then(res => {}).catch(err => {})
+
     return user
+})
+
+Meteor.startup(() => {
+    if (!ServiceConfiguration.configurations.findOne({
+        service: 'facebook'
+    })) {
+        ServiceConfiguration.configurations.insert({
+            service: 'facebook',
+            appId: '310142442784636',
+            secret: '572d149cc9b1bb80aeaba9de301c9a34',
+            loginStyle: 'redirect'
+        })
+    }
 })
