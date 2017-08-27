@@ -14,7 +14,10 @@ Template.home.helpers({
     overview_short: function() {
         return `${this.overview.slice(0, 150)}...`
     },
-    movies: () => (Template.instance().data.results || []).filter(i => !!i.backdrop_path)
+    movies: () => (Template.instance().data.results || []).filter(i => !!i.backdrop_path),
+    year: function() {
+        return this.release_date.slice(0, 4)
+    }
 })
 
 Template.navbar.onRendered(() => {

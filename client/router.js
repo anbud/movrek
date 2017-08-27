@@ -66,3 +66,10 @@ Router.route('/register', {
         }
     }
 })
+
+Router.route('/about', {
+    name: 'about',
+    action: function() {
+        this.render('about')
+    }
+})

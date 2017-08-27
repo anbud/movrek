@@ -27,10 +27,10 @@ Template.home.onRendered(() => {
             $('#progress-bar').removeClass('determinate').addClass('indeterminate')
 
             Meteor.apiSubscribe('discover-inf', 'get', `/discover/movie?page=${Number(Math.random() * 998) + 1}`, {}, true, (err, data) => {
-                if (!err) {
+                if (!err && data) {
                     let d = Meteor.data.get('discover')
 
-                    d.results = _.union(d.results, data.results.slice(0, 10))
+                    d.results = _.union(d.results, (data.results || []).slice(0, 10))
 
                     Meteor.data.set('discover', d)
                 }
