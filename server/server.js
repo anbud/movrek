@@ -8,9 +8,12 @@ const pioClient = new predictionio.Events({
     appId: 1,
     accessKey: predictionioKey
 })
+const pioengine = new predictionio.Engine({
+    url: 'http://localhost'
+})
 
 Meteor.methods({
-    callApi: function(method, endpoint, data = {}) {
+    callTMDBApi: function(method, endpoint, data = {}) {
         check(method, String)
         check(endpoint, String)
         check(data, Object)
@@ -37,6 +40,55 @@ Meteor.methods({
                 })
             }
         })
+
+        return future.wait()
+    },
+    importTMDB: () => {
+        const cb = (err, data) => {
+            if (data.success) {
+                (data.results || []).forEach(j => {
+                    client.createItem({
+                        iid: j.id,
+                        properties: {
+                            itypes: 1,
+                            title: j.title,
+                            poster_path: j.poster_path,
+                            overview: j.overview,
+                            release_date: j.release_date,
+                            genre: j.genre,
+                            popularity: j.popularity,
+                        },
+                        eventTime: new Date().toISOString()
+                    }).then(res => {}).catch(err => {})
+                })
+            }
+        }
+
+        for (let i = 0; i < 1000; i++) {
+            Meteor.call('callTMDBApi', 'get', `/discover/movie?page=${i}`, {}, cb(err, data))
+        }
+    },
+    recordAction: (movieId, event, properties = {}) => {
+        check(movieId, String)
+        check(event, String)
+        check(properties, Object)
+
+        client.createAction({
+            event: event,
+            uid: Meteor.userId(),
+            iid: movieId,
+            eventTime: new Date().toISOString(),
+            properties: properties
+        }).then(res => {}).catch(err => {})
+    },
+    getRecommendations: () => {
+        const Future = require('fibers/future')
+        const future = new Future()
+
+        pioengine.sendQuery({
+            uid: 'user-id',
+            n: 1
+        }).then(res => future.return(res))
 
         return future.wait()
     }

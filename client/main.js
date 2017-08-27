@@ -18,7 +18,7 @@ Meteor.apiSubscribe = (key, method, endpoint, data = {}, rerun = false, callback
     }
 
     if (!Meteor.data.get(key) || rerun) {
-        Meteor.call('callApi', method, endpoint, data || {}, (err, data) => {
+        Meteor.call('callTMDBApi', method, endpoint, data || {}, (err, data) => {
             if (data) {
                 Meteor.data.set(key, data.data)
             }
