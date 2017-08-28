@@ -1,7 +1,7 @@
 const apiUrl = 'https://api.themoviedb.org/3'
 const apiKey = '84fcaac366c4f4efa66458ad7aa32d16'
 
-const predictionioKey = ''
+const predictionioKey = '7fjbmjw8gPnEhz5Yyix55dZT6rW-Oswd4RmQq9WxLtuaFBj4HynwTvymosJsG-Ph'
 
 const predictionio = require('predictionio-driver')
 const pioClient = new predictionio.Events({
@@ -9,7 +9,7 @@ const pioClient = new predictionio.Events({
     accessKey: predictionioKey
 })
 const pioengine = new predictionio.Engine({
-    url: 'http://localhost'
+    url: 'http://51.15.61.139:8000'
 })
 
 Meteor.methods({
