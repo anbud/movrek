@@ -81,14 +81,20 @@ Meteor.methods({
             properties: properties
         }).then(res => {}).catch(err => {})
     },
-    getRecommendations: () => {
+    getRecommendation: () => {
         const Future = require('fibers/future')
         const future = new Future()
 
         pioengine.sendQuery({
-            uid: 'user-id',
+            uid: Meteor.userId(),
             n: 1
-        }).then(res => future.return(res))
+        }).then(res => {
+            Meteor.call('callTMDBApi', 'get', `/movie/${res.itemScores[0].item}`, {}, (err, data) => {
+                future.return(_.extend(data.data.data, {
+                    recommendation: true
+                }))
+            })
+        }).catch(err => {})
 
         return future.wait()
     }
