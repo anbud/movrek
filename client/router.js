@@ -25,7 +25,7 @@ Router.onAfterAction(function() {
 
 Router.route('/home', {
     name: 'home',
-    waitOn: () => [Meteor.apiSubscribe('discover', 'get', `/discover/movie?page=${Number(Math.random() * 998) + 1}`)/* , Meteor.getRecommendation('recom')*/],
+    waitOn: () => [Meteor.apiSubscribe('discover', 'get', `/discover/movie?page=${Number(Math.random() * 998) + 1}`), Meteor.getRecommendation('recom')],
     action: function() {
         this.render('home', {
             data: () => {

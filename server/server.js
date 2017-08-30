@@ -6,10 +6,13 @@ const predictionioKey = '7fjbmjw8gPnEhz5Yyix55dZT6rW-Oswd4RmQq9WxLtuaFBj4HynwTvy
 const predictionio = require('predictionio-driver')
 const pioClient = new predictionio.Events({
     appId: 1,
-    accessKey: predictionioKey
+    accessKey: predictionioKey,
+    url: 'http://51.15.61.139',
+    port: 7070
 })
-const pioengine = new predictionio.Engine({
-    url: 'http://51.15.61.139:8000'
+const pioEngine = new predictionio.Engine({
+    url: 'http://51.15.61.139',
+    port: 8000
 })
 
 Meteor.methods({
@@ -43,29 +46,40 @@ Meteor.methods({
 
         return future.wait()
     },
-    importTMDB: () => {
-        const cb = (err, data) => {
-            if (data.success) {
-                (data.results || []).forEach(j => {
-                    client.createItem({
-                        iid: j.id,
-                        properties: {
-                            itypes: 1,
-                            title: j.title,
-                            poster_path: j.poster_path,
-                            overview: j.overview,
-                            release_date: j.release_date,
-                            genre: j.genre,
-                            popularity: j.popularity,
-                        },
-                        eventTime: new Date().toISOString()
-                    }).then(res => {}).catch(err => {})
-                })
-            }
-        }
+    // utility function, not to be called multiple times
+    importTMDB: (token) => {
+        check(token, String)
 
-        for (let i = 0; i < 1000; i++) {
-            Meteor.call('callTMDBApi', 'get', `/discover/movie?page=${i}`, {}, cb(err, data))
+        if (token === 'h1dd3nt0k3n') {
+            let k = 0
+            const cb = (err, data) => {
+                if (data.success) {
+                    (data.data.results || []).forEach(j => {
+                        pioClient.createItem({
+                            iid: j.id,
+                            properties: {
+                                itypes: 1,
+                                title: j.title,
+                                poster_path: j.poster_path,
+                                overview: j.overview,
+                                release_date: j.release_date,
+                                genre: j.genre,
+                                popularity: j.popularity,
+                            },
+                            eventTime: new Date().toISOString()
+                        }).then(res => {
+                            k++
+                            console.log(`${k / 200}%`)
+                        }).catch(err => {
+                            console.log(err)
+                        })
+                    })
+                }
+            }
+
+            for (let i = 1; i < 1000; i++) {
+                Meteor.call('callTMDBApi', 'get', `/discover/movie?page=${i}`, {}, cb)
+            }
         }
     },
     recordAction: (movieId, event, properties = {}) => {
@@ -73,28 +87,35 @@ Meteor.methods({
         check(event, String)
         check(properties, Object)
 
-        client.createAction({
+        pioClient.createAction({
             event: event,
             uid: Meteor.userId(),
             iid: movieId,
             eventTime: new Date().toISOString(),
             properties: properties
-        }).then(res => {}).catch(err => {})
+        }).then(res => {}).catch(err => {
+            console.err(err)
+        })
     },
     getRecommendation: () => {
         const Future = require('fibers/future')
         const future = new Future()
 
-        pioengine.sendQuery({
+        pioEngine.sendQuery({
             uid: Meteor.userId(),
             n: 1
         }).then(res => {
-            Meteor.call('callTMDBApi', 'get', `/movie/${res.itemScores[0].item}`, {}, (err, data) => {
-                future.return(_.extend(data.data.data, {
-                    recommendation: true
-                }))
-            })
-        }).catch(err => {})
+            if (res.itemScores.length > 0) {
+                Meteor.call('callTMDBApi', 'get', `/movie/${res.itemScores[0].item}`, {}, (err, data) => {
+                    future.return(_.extend(data.data.data, {
+                        recommendation: true
+                    }))
+                })
+            } else {
+                future.return({})
+            }
+        }).catch(err => {
+        })
 
         return future.wait()
     }
