@@ -1,12 +1,8 @@
 App.info({
-    id: 'rs.zx.movierecommender',
-    name: 'Movie recommender',
-    version: '0.0.5'
-});
-
-App.launchScreens({
-    'android_hdpi_portrait': 'public/images/launch.png'
-});
+    id: 'rs.zx.mozzak',
+    name: 'Mozzak',
+    version: '0.4.3'
+})
 
 App.icons({
     'android_mdpi': 'public/images/icon.png',
