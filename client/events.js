@@ -24,22 +24,24 @@ Template.home.events({
 })
 
 Template.home.onRendered(() => {
-    $(window).scroll(() => {
-        if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
-            $('#progress-bar').removeClass('determinate').addClass('indeterminate')
+    if (!((Meteor.user() || {}).profile || {}).disableInfinite) {
+        $(window).scroll(() => {
+            if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                $('#progress-bar').removeClass('determinate').addClass('indeterminate')
 
-            Meteor.apiSubscribe('discover-inf', 'get', `/discover/movie?page=${Number(Math.random() * 998) + 1}`, {}, true, (err, data) => {
-                if (!err && data) {
-                    let d = Meteor.data.get('discover')
+                Meteor.apiSubscribe('discover-inf', 'get', `/discover/movie?page=${Number(Math.random() * 998) + 1}`, {}, true, (err, data) => {
+                    if (!err && data) {
+                        let d = Meteor.data.get('discover')
 
-                    d.results = _.union(d.results, (data.results || []).slice(0, 10))
+                        d.results = _.union(d.results, (data.results || []).slice(0, ((Meteor.user() || {}).profile || {}).movies || 20))
 
-                    Meteor.data.set('discover', d)
-                }
-                $('#progress-bar').removeClass('indeterminate').addClass('determinate')
-            })
-        }
-    })
+                        Meteor.data.set('discover', d)
+                    }
+                    $('#progress-bar').removeClass('indeterminate').addClass('determinate')
+                })
+            }
+        })
+    }
 })
 
 Template.navbar.events({
@@ -61,6 +63,9 @@ Template.navbar.events({
     },
     'click #js-back': (event, templateInstance) => {
         history.back(-1)
+    },
+    'click #js-exit': (event, templateInstance) => {
+        navigator.app.exitApp()
     }
 })
 
@@ -100,5 +105,15 @@ Template.splash.events({
     },
     'click #js-password': (event, templateInstance) => {
         Router.go('login')
+    }
+})
+
+Template.settings.events({
+    'click #js-infinite, click #js-movies': (event, templateInstance) => {
+        Meteor.call('saveSettings', !$('#js-infinite').is(':checked'), Number($('#js-movies').val()), (err, data) => {
+            if (!err) {
+                Materialize.toast('Saved successfully!')
+            }
+        })
     }
 })

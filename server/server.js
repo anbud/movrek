@@ -98,26 +98,35 @@ Meteor.methods({
         })
     },
     getRecommendation: () => {
-        const Future = require('fibers/future')
-        const future = new Future()
-
-        pioEngine.sendQuery({
+        return pioEngine.sendQuery({
             uid: Meteor.userId(),
             n: 1
         }).then(res => {
             if (res.itemScores.length > 0) {
                 Meteor.call('callTMDBApi', 'get', `/movie/${res.itemScores[0].item}`, {}, (err, data) => {
-                    future.return(_.extend(data.data.data, {
+                    return _.extend(data.data.data, {
                         recommendation: true
-                    }))
+                    })
                 })
-            } else {
-                future.return({})
             }
-        }).catch(err => {
-        })
 
-        return future.wait()
+            return {}
+        }).catch(err => {
+            return {}
+        })
+    },
+    saveSettings: (infinite, movies) => {
+        check(infinite, Boolean)
+        check(movies, Number)
+
+        Meteor.users.update({
+            _id: Meteor.userId()
+        }, {
+            $set: {
+                'profile.disableInfinite': infinite,
+                'profile.movies': movies
+            }
+        })
     }
 })
 

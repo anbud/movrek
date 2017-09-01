@@ -81,3 +81,10 @@ Router.route('/about', {
         this.render('about')
     }
 })
+
+Router.route('/settings', {
+    name: 'settings',
+    action: function() {
+        this.render('settings')
+    }
+})

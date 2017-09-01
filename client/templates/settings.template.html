@@ -1,0 +1,26 @@
+<template name="settings">
+	<ul class="collection with-header">
+        <li class="collection-header"><h4>Settings</h4></li>
+        <li class="collection-item">
+        	<div>Infinite scroll
+        		<div class="secondary-content switch">
+				    <label>
+				    	{{#unless currentUser.profile.disableInfinite}}
+				    	<input id="js-infinite" type="checkbox" checked>
+				    	{{else}}
+				    	<input id="js-infinite" type="checkbox">
+				    	{{/unless}}
+				     	<span class="lever"></span>
+				    </label>
+  				</div>
+  			</div>
+  		</li>
+  		<li class="collection-item">
+        	<div>Movies per page
+        		<div class="range-field cyan-text text-darken-3">
+			    	<input id="js-movies" type="range" value="{{currentUser.profile.movies}}" min="5" max="20" />
+			    </div>
+  			</div>
+  		</li>
+    </ul>
+</template>
