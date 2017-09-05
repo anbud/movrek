@@ -2,7 +2,7 @@ module.exports = {
   servers: {
     one: {
       // TODO: set host address, username, and authentication method
-      host: '51.15.46.189',
+      host: 'mozzak.zx.rs',
       username: 'root',
       pem: '../../delfi_rsa'
     }
@@ -24,8 +24,8 @@ module.exports = {
     env: {
       // TODO: Change to your app's url
       // If you are using ssl, it needs to start with https://
-      ROOT_URL: 'http://51.15.46.189',
-      MONGO_URL: 'mongodb://localhost/meteor',
+      ROOT_URL: 'http://mozzak.zx.rs',
+      MONGO_URL: 'mongodb://localhost/meteor'
     },
 
     // ssl: { // (optional)
@@ -39,7 +39,7 @@ module.exports = {
 
     docker: {
       // change to 'kadirahq/meteord' if your app is not using Meteor 1.4
-      image: 'abernix/meteord:base',
+      image: 'mrauhu/meteord:node-8.1.4-base',
       // imagePort: 80, // (default: 80, some images EXPOSE different ports)
     },
 

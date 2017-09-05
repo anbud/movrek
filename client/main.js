@@ -13,8 +13,6 @@ Meteor.getRecommendation = (key) => {
         } else {
             Meteor.data.set(key, {})
         }
-
-        console.log('ds')
     })
 
     return () => !!Meteor.data.get(key)

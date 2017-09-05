@@ -70,7 +70,7 @@ Template.navbar.events({
 })
 
 Template.login.events({
-    'click #js-submit': (event, templateInstance) => {
+    'click #js-submit, submit form': (event, templateInstance) => {
         Meteor.loginWithPassword($('#js-email').val(), $('#js-password').val(), (err, data) => {
             if (!err) {
                 Router.go('home')
@@ -82,7 +82,7 @@ Template.login.events({
 })
 
 Template.register.events({
-    'click #js-submit': (event, templateInstance) => {
+    'click #js-submit, submit form': (event, templateInstance) => {
         Accounts.createUser({
             email: $('#js-email').val(),
             password: $('#js-password').val(),
