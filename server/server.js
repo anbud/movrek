@@ -1,17 +1,18 @@
 const apiUrl = 'https://api.themoviedb.org/3'
 const apiKey = '84fcaac366c4f4efa66458ad7aa32d16'
 
-const predictionioKey = '7fjbmjw8gPnEhz5Yyix55dZT6rW-Oswd4RmQq9WxLtuaFBj4HynwTvymosJsG-Ph'
+const pioUrl = 'http://pio.zx.rs'
+const pioKey = 'YVgRJUeiXrniPBON6Rq42_f6OiwOUsuXhmNDKq7dPRGq-M8yZ3ZHM5_FHRWL2A4Y'
 
 const predictionio = require('predictionio-driver')
 const pioClient = new predictionio.Events({
     appId: 1,
-    accessKey: predictionioKey,
-    url: 'http://51.15.61.139',
+    accessKey: pioKey,
+    url: pioUrl,
     port: 7070
 })
 const pioEngine = new predictionio.Engine({
-    url: 'http://51.15.61.139',
+    url: pioUrl,
     port: 8000
 })
 
@@ -46,7 +47,7 @@ Meteor.methods({
 
         return future.wait()
     },
-    // utility function, not to be called multiple times
+    // utility function to populate the predictionio event server, not to be called multiple times (already called, do not use)
     importTMDB: (token) => {
         check(token, String)
 
@@ -87,9 +88,11 @@ Meteor.methods({
         check(event, String)
         check(properties, Object)
 
+        let user = Meteor.userId()
+
         pioClient.createAction({
             event: event,
-            uid: Meteor.userId(),
+            uid: user,
             iid: movieId,
             eventTime: new Date().toISOString(),
             properties: properties
@@ -98,22 +101,25 @@ Meteor.methods({
         })
     },
     getRecommendation: () => {
-        return pioEngine.sendQuery({
-            uid: Meteor.userId(),
+        const Future = require('fibers/future')
+        const future = new Future()
+
+        pioEngine.sendQuery({
+            user: Meteor.userId(),
             n: 1
-        }).then(res => {
+        }, Meteor.bindEnvironment((err, res) => {
             if (res.itemScores.length > 0) {
                 Meteor.call('callTMDBApi', 'get', `/movie/${res.itemScores[0].item}`, {}, (err, data) => {
-                    return _.extend(data.data.data, {
+                    future.return(_.extend(data.data.data, {
                         recommendation: true
-                    })
+                    }))
                 })
+            } else {
+                future.return({})
             }
+        }))
 
-            return {}
-        }).catch(err => {
-            return {}
-        })
+        return future.wait()
     },
     saveSettings: (infinite, movies) => {
         check(infinite, Boolean)
@@ -127,6 +133,13 @@ Meteor.methods({
                 'profile.movies': movies
             }
         })
+    },
+    user1: () => {
+        let user = Meteor.userId()
+
+        pioClient.createUser({
+            uid: user
+        }).then(res => {console.log(res)}).catch(err => {console.log(err)})
     }
 })
 

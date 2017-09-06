@@ -1,7 +1,7 @@
 App.info({
     id: 'rs.zx.mozzak',
     name: 'Mozzak',
-    version: '0.4.3'
+    version: '0.9.3'
 })
 
 App.icons({
