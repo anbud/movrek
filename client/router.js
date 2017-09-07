@@ -32,7 +32,7 @@ Router.route('/home', {
                 let data = Meteor.data.get('discover')
 
                 if (!_.isEmpty(Meteor.data.get('recom'))) {
-                    data.results.push(Meteor.data.get('recom'))
+                    data.results.unshift(Meteor.data.get('recom'))
                 }
 
                 return data

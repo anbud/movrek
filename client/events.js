@@ -33,11 +33,17 @@ Template.home.onRendered(() => {
                     if (!err && data) {
                         let d = Meteor.data.get('discover')
 
-                        d.results = _.union(d.results, (data.results || []).slice(0, ((Meteor.user() || {}).profile || {}).movies || 20))
+                        Meteor.getRecommendation('recom-inf', (err, dat) => {
+                            if (!_.isEmpty(Meteor.data.get('recom-inf'))) {
+                                d.results = _.union(_.union(d.results, [Meteor.data.get('recom-inf')]), (data.results || []).slice(0, ((Meteor.user() || {}).profile || {}).movies || 20))
+                            } else {
+                                d.results = _.union(d.results, (data.results || []).slice(0, ((Meteor.user() || {}).profile || {}).movies || 20))
+                            }
+                            Meteor.data.set('discover', d)
 
-                        Meteor.data.set('discover', d)
+                            $('#progress-bar').removeClass('indeterminate').addClass('determinate')
+                        })
                     }
-                    $('#progress-bar').removeClass('indeterminate').addClass('determinate')
                 })
             }
         })

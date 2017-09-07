@@ -6,12 +6,16 @@ const Materialize = require('materialize-css')
 
 Meteor.data = new ReactiveDict()
 
-Meteor.getRecommendation = (key) => {
+Meteor.getRecommendation = (key, cb) => {
     Meteor.call('getRecommendation', (err, data) => {
         if (!err) {
             Meteor.data.set(key, data)
         } else {
             Meteor.data.set(key, {})
+        }
+
+        if (cb && typeof cb === 'function') {
+            cb(err, data || {})
         }
     })
 

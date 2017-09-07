@@ -11,7 +11,7 @@ Template.home.helpers({
 
         return arr
     },
-    movies: () => (Template.instance().data.results || []).filter(i => !!i.backdrop_path).sort((i1, i2) => i2.recommendation - i1.recommendation),
+    movies: () => (Template.instance().data.results || []).filter(i => !!i.backdrop_path),
     year: function() {
         return this.release_date.slice(0, 4)
     }
