@@ -17,7 +17,7 @@ Template.home.events({
 
         $(event.currentTarget).parent('.card-action').removeClass('cyan-text text-darken-3').addClass('pink-text text-accent-2')
 
-        Meteor.call('recordAction', $(event.currentTarget).data('id') + '', 'rate', {
+        Meteor.call('recordAction', $(event.currentTarget).data('id'), 'rate', {
             rating: Number($(event.currentTarget).data('val'))
         }, (err, data) => {})
     }

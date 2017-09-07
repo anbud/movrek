@@ -84,7 +84,7 @@ Meteor.methods({
         }
     },
     recordAction: (movieId, event, properties = {}) => {
-        check(movieId, String)
+        check(movieId, Number)
         check(event, String)
         check(properties, Object)
 
@@ -97,7 +97,7 @@ Meteor.methods({
             eventTime: new Date().toISOString(),
             properties: properties
         }).then(res => {}).catch(err => {
-            console.err(err)
+            console.log(err)
         })
     },
     getRecommendation: () => {
@@ -109,8 +109,8 @@ Meteor.methods({
             n: 1
         }, Meteor.bindEnvironment((err, res) => {
             if (res.itemScores.length > 0) {
-                Meteor.call('callTMDBApi', 'get', `/movie/${res.itemScores[0].item}`, {}, (err, data) => {
-                    future.return(_.extend(data.data.data, {
+                Meteor.call('callTMDBApi', 'get', `/movie/${_.shuffle(res.itemScores)[0].item}`, {}, (err, data) => {
+                    future.return(_.extend(data.data, {
                         recommendation: true
                     }))
                 })

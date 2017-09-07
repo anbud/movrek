@@ -2,7 +2,7 @@
 	<div class="row center">
 		{{#each movies}}
         <div class="col s12 m12 l12">
-        	<div class="card">
+        	<div class="card {{#if recommendation}}pink accent-3{{/if}}">
             	<div class="card-image">
             		<img src="https://image.tmdb.org/t/p/w1280{{backdrop_path}}" class="activator">
             		<span class="card-title activator">{{title}} ({{year}})</span>
