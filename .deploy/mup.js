@@ -39,7 +39,7 @@ module.exports = {
 
     docker: {
       // change to 'kadirahq/meteord' if your app is not using Meteor 1.4
-      image: 'mrauhu/meteord:node-8.1.4-base',
+      image: 'mrauhu/meteord:node-4.8.4-base',
       // imagePort: 80, // (default: 80, some images EXPOSE different ports)
     },
 
