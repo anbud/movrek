@@ -12,4 +12,9 @@ App.icons({
     'android_xxxhdpi': 'public/images/icon.png',
 })
 
+App.launchScreens({
+    'iphone6': 'public/images/launch.png',
+    'android_hdpi_portrait': 'public/images/launch.png'
+})
+
 App.accessRule('*')
